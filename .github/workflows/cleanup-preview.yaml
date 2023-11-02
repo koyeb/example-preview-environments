@@ -1,0 +1,20 @@
+name: Cleanup preview environments on Koyeb
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  cleanup_preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install and configure the Koyeb CLI
+        uses: koyeb-community/install-koyeb-cli@v2
+        with:
+          api_token: "${{ secrets.KOYEB_API_TOKEN }}"
+
+      - name: Cleanup Koyeb application
+        uses: koyeb/action-git-deploy/cleanup@v1
+        with:
+          app-name: "expressjs-pr-${{ github.head_ref }}"
